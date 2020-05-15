@@ -19,7 +19,7 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", validatePostId, (req, res) => {
   // do your magic!
   Posts.getById(req.params.id)
     .then((posts) => {
@@ -34,7 +34,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", validatePostId, (req, res) => {
   // do your magic!
   Posts.getById(req.params.id).then((post) => {
     res.status(200).json(post);
@@ -48,7 +48,7 @@ router.delete("/:id", (req, res) => {
   });
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", validatePostId, (req, res) => {
   // do your magic!
 
   Posts.update(req.params.id, req.body)

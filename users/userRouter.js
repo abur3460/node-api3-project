@@ -6,7 +6,7 @@ const Posts = require("../posts/postDb.js");
 
 const router = express.Router();
 
-router.post("/", (req, res) => {
+router.post("/", validateUser, validatePost, (req, res) => {
   // do your magic!
   Users.insert(req.body)
     .then((user) => {
@@ -20,7 +20,7 @@ router.post("/", (req, res) => {
     });
 });
 
-router.post("/:id/posts", (req, res) => {
+router.post("/:id/posts", validateUserId, validatePost, (req, res) => {
   // do your magic!
   const user = { ...req.body, user_id: req.params.id };
 
@@ -51,14 +51,13 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", validateUserId, (req, res) => {
   // do your magic!
   Users.getById(req.params.id)
     .then((user) => {
       res.status(200).json(user);
     })
     .catch((error) => {
-      // log error to database
       console.log(error);
       res.status(500).json({
         error: "The user information could not be retrieved.",
@@ -66,14 +65,13 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.get("/:id/posts", (req, res) => {
+router.get("/:id/posts", validateUserId, (req, res) => {
   // do your magic!
   Users.getUserPosts(req.params.id)
     .then((posts) => {
       res.status(200).json(posts);
     })
     .catch((error) => {
-      // log error to database
       console.log(error);
       res.status(500).json({
         error: "The posts could not be retrieved.",
@@ -81,13 +79,12 @@ router.get("/:id/posts", (req, res) => {
     });
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", validateUserId, (req, res) => {
   // do your magic!
   Users.getById(req.params.id).then((user) => {
     res.status(200).json(user);
   });
   Users.remove(req.params.id).catch((error) => {
-    // log error to database
     console.log(error);
     res.status(500).json({
       error: "The user could not be removed",
@@ -95,14 +92,13 @@ router.delete("/:id", (req, res) => {
   });
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", validateUserId, (req, res) => {
   // do your magic!
   Users.update(req.params.id, req.body)
     .then((user) => {
       res.status(200).json(user);
     })
     .catch((error) => {
-      // log error to database
       console.log(error);
       res.status(500).json({
         error: "The user information could not be modified.",
